@@ -3,6 +3,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import candidatesRouter from './api/candidates.js';
+import scrapeResultsRouter from './api/scrape-results.js';
+import DailyScraperJob from './jobs/daily-scrape.js';
 
 dotenv.config();
 
@@ -21,6 +23,7 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/candidates', candidatesRouter);
+app.use('/api/scrape-results', scrapeResultsRouter);
 
 // Serve static files (later for React frontend)
 app.use(express.static('public'));
@@ -31,7 +34,21 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log('API available at http://localhost:' + PORT + '/api');
+const server = app.listen(PORT, () => {
+  console.log(`\n🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📍 API available at http://localhost:${PORT}/api`);
+  console.log(`🌐 Registration: http://localhost:${PORT}`);
+  console.log(`👨‍💼 Admin Dashboard: http://localhost:${PORT}/admin`);
+  console.log('\n');
+
+  // Initialize daily scraper job (only if API key is configured)
+  if (process.env.ANTHROPIC_API_KEY) {
+    const scraperJob = new DailyScraperJob();
+    scraperJob.schedule();
+    console.log('✓ Daily scraper job scheduled\n');
+  } else {
+    console.log('⚠️  ANTHROPIC_API_KEY not set - scraper job disabled\n');
+  }
 });
+
+export default server;

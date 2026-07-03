@@ -8,7 +8,10 @@
     "dev": "node --watch src/server.js",
     "build": "tsc",
     "start": "node src/server.js",
-    "db:init": "node src/db/init.js"
+    "db:init": "node src/db/init.js",
+    "scrape": "node src/cli.js scrape",
+    "generate-messages": "node src/cli.js generate-messages",
+    "full-pipeline": "node src/cli.js full"
   },
   "keywords": ["recruitment", "workforce", "landscaping"],
   "author": "Kania Galabau",
