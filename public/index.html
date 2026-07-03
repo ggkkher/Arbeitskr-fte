@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kania Galabau - Arbeitskräfte Bewerbung</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 40px; max-width: 600px; width: 100%; }
+        h1 { color: #333; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 14px; }
+        .language-switch { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; }
+        .lang-btn { padding: 8px 12px; border: none; background: #f0f0f0; cursor: pointer; border-radius: 6px; font-weight: 500; }
+        .lang-btn.active { background: #667eea; color: white; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 6px; color: #333; font-weight: 500; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 5px rgba(102, 126, 234, 0.3); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+        button { width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        button:hover { background: #764ba2; }
+        .success { display: none; background: #d4edda; color: #155724; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #c3e6cb; }
+        .error { display: none; background: #f8d7da; color: #721c24; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #f5c6cb; }
+        .nav { margin-bottom: 30px; }
+        .nav a { color: #667eea; text-decoration: none; margin-right: 20px; font-weight: 500; }
+        .nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="language-switch">
+        <button class="lang-btn active" onclick="setLanguage('de')">Deutsch</button>
+        <button class="lang-btn" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" onclick="setLanguage('pl')">Polski</button>
+        <button class="lang-btn" onclick="setLanguage('cs')">Čeština</button>
+    </div>
+
+    <div class="container">
+        <div class="nav">
+            <a href="/">Bewerbung</a>
+            <a href="/admin">Admin</a>
+        </div>
+
+        <h1 id="title">Jetzt als Arbeitskraft bewerben</h1>
+        <p class="subtitle" id="subtitle">Kostenlose Registrierung für Gärtner und Handwerker</p>
+
+        <div class="success" id="successMessage"></div>
+        <div class="error" id="errorMessage"></div>
+
+        <form id="registrationForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name" id="labelName">Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone" id="labelPhone">Telefon *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" id="labelEmail">Email</label>
+                <input type="email" id="email" name="email">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="skill_level" id="labelSkill">Erfahrungslevel</label>
+                    <select id="skill_level" name="skill_level">
+                        <option value="">-- Bitte wählen --</option>
+                        <option id="skillUnlearned">Ungelernt / Helfer</option>
+                        <option id="skillLearned">Gelernt / Fachkraft</option>
+                        <option id="skillMaster">Meister / Vorarbeiter</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="region" id="labelRegion">Region</label>
+                    <input type="text" id="region" name="region" placeholder="z.B. Berlin, Köln">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="experience" id="labelExperience">Deine Fähigkeiten & Erfahrung</label>
+                <textarea id="experience" name="experience" rows="4" placeholder="z.B. Terrassen, Kantensteine, Pflasterarbeiten, Bewässerungsanlagen..."></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="availability" id="labelAvailability">Verfügbarkeit</label>
+                    <select id="availability" name="availability">
+                        <option value="">-- Bitte wählen --</option>
+                        <option id="availSofort">Sofort verfügbar</option>
+                        <option id="availTwoWeeks">In 2 Wochen</option>
+                        <option id="availMonth">In 1 Monat</option>
+                        <option id="availFlexible">Flexibel</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="language" id="labelLanguage">Sprachniveau Deutsch</label>
+                    <select id="language" name="language">
+                        <option value="">-- Bitte wählen --</option>
+                        <option id="langBasic">Grundkenntnisse</option>
+                        <option id="langGood">Gute Kenntnisse</option>
+                        <option id="langFluent">Fließend</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn">Jetzt bewerben</button>
+            <p style="color: #999; font-size: 12px; margin-top: 15px; text-align: center;">
+                <span id="privacyText">Deine Daten werden sicher gespeichert und nur für Kontaktaufnahmen verwendet.</span>
+            </p>
+        </form>
+    </div>
+
+    <script>
+        const translations = {
+            de: {
+                title: 'Jetzt als Arbeitskraft bewerben',
+                subtitle: 'Kostenlose Registrierung für Gärtner und Handwerker',
+                labelName: 'Name *',
+                labelPhone: 'Telefon *',
+                labelEmail: 'Email',
+                labelSkill: 'Erfahrungslevel',
+                labelRegion: 'Region',
+                labelExperience: 'Deine Fähigkeiten & Erfahrung',
+                labelAvailability: 'Verfügbarkeit',
+                labelLanguage: 'Sprachniveau Deutsch',
+                skillUnlearned: 'Ungelernt / Helfer',
+                skillLearned: 'Gelernt / Fachkraft',
+                skillMaster: 'Meister / Vorarbeiter',
+                availSofort: 'Sofort verfügbar',
+                availTwoWeeks: 'In 2 Wochen',
+                availMonth: 'In 1 Monat',
+                availFlexible: 'Flexibel',
+                langBasic: 'Grundkenntnisse',
+                langGood: 'Gute Kenntnisse',
+                langFluent: 'Fließend',
+                submitBtn: 'Jetzt bewerben',
+                privacyText: 'Deine Daten werden sicher gespeichert und nur für Kontaktaufnahmen verwendet.',
+                successMessage: 'Vielen Dank für deine Bewerbung! Wir werden dich bald kontaktieren.',
+                errorMessage: 'Fehler bei der Registrierung. Bitte versuche es später erneut.'
+            },
+            en: {
+                title: 'Apply Now as a Worker',
+                subtitle: 'Free registration for gardeners and craftsmen',
+                labelName: 'Name *',
+                labelPhone: 'Phone *',
+                labelEmail: 'Email',
+                labelSkill: 'Experience Level',
+                labelRegion: 'Region',
+                labelExperience: 'Your Skills & Experience',
+                labelAvailability: 'Availability',
+                labelLanguage: 'German Language Level',
+                skillUnlearned: 'Unskilled / Helper',
+                skillLearned: 'Trained / Skilled',
+                skillMaster: 'Master / Foreman',
+                availSofort: 'Available immediately',
+                availTwoWeeks: 'In 2 weeks',
+                availMonth: 'In 1 month',
+                availFlexible: 'Flexible',
+                langBasic: 'Basic',
+                langGood: 'Good',
+                langFluent: 'Fluent',
+                submitBtn: 'Apply Now',
+                privacyText: 'Your data is securely stored and used only for contact purposes.',
+                successMessage: 'Thank you for your application! We will contact you soon.',
+                errorMessage: 'Error during registration. Please try again later.'
+            },
+            pl: {
+                title: 'Zgłoś się teraz jako pracownik',
+                subtitle: 'Bezpłatna rejestracja dla ogrodników i rzemieślników',
+                labelName: 'Imię i nazwisko *',
+                labelPhone: 'Telefon *',
+                labelEmail: 'Email',
+                labelSkill: 'Poziom doświadczenia',
+                labelRegion: 'Region',
+                labelExperience: 'Twoje umiejętności i doświadczenie',
+                labelAvailability: 'Dostępność',
+                labelLanguage: 'Poziom języka niemieckiego',
+                skillUnlearned: 'Niewykwalifikowany / Pomocnik',
+                skillLearned: 'Wykwalifikowany / Fachowiec',
+                skillMaster: 'Mistrz / Kierownik',
+                availSofort: 'Dostępny natychmiast',
+                availTwoWeeks: 'Za 2 tygodnie',
+                availMonth: 'Za 1 miesiąc',
+                availFlexible: 'Elastycznie',
+                langBasic: 'Podstawowy',
+                langGood: 'Dobry',
+                langFluent: 'Biegły',
+                submitBtn: 'Zgłoś się teraz',
+                privacyText: 'Twoje dane są bezpiecznie przechowywane i używane tylko do kontaktu.',
+                successMessage: 'Dziękuję za aplikację! Skontaktujemy się z Tobą wkrótce.',
+                errorMessage: 'Błąd podczas rejestracji. Spróbuj ponownie później.'
+            },
+            cs: {
+                title: 'Podejte si přihlášku nyní',
+                subtitle: 'Bezplatná registrace pro zahradníky a řemeslníky',
+                labelName: 'Jméno *',
+                labelPhone: 'Telefon *',
+                labelEmail: 'Email',
+                labelSkill: 'Úroveň zkušeností',
+                labelRegion: 'Region',
+                labelExperience: 'Vaše dovednosti a zkušenosti',
+                labelAvailability: 'Dostupnost',
+                labelLanguage: 'Úroveň německého jazyka',
+                skillUnlearned: 'Nekvalifikovaný / Pomocník',
+                skillLearned: 'Kvalifikovaný / Odborník',
+                skillMaster: 'Mistr / Vedoucí',
+                availSofort: 'Okamžitě k dispozici',
+                availTwoWeeks: 'Za 2 týdny',
+                availMonth: 'Za 1 měsíc',
+                availFlexible: 'Flexibilně',
+                langBasic: 'Základní',
+                langGood: 'Dobrý',
+                langFluent: 'Plynulý',
+                submitBtn: 'Podejte si přihlášku',
+                privacyText: 'Vaše údaje jsou bezpečně uloženy a používány pouze pro kontakt.',
+                successMessage: 'Děkujeme za vaši přihlášku! Brzy se vám ozveme.',
+                errorMessage: 'Chyba během registrace. Prosím zkuste znovu později.'
+            }
+        };
+
+        let currentLanguage = 'de';
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('labelName').textContent = t.labelName;
+            document.getElementById('labelPhone').textContent = t.labelPhone;
+            document.getElementById('labelEmail').textContent = t.labelEmail;
+            document.getElementById('labelSkill').textContent = t.labelSkill;
+            document.getElementById('labelRegion').textContent = t.labelRegion;
+            document.getElementById('labelExperience').textContent = t.labelExperience;
+            document.getElementById('labelAvailability').textContent = t.labelAvailability;
+            document.getElementById('labelLanguage').textContent = t.labelLanguage;
+            document.getElementById('skillUnlearned').textContent = t.skillUnlearned;
+            document.getElementById('skillLearned').textContent = t.skillLearned;
+            document.getElementById('skillMaster').textContent = t.skillMaster;
+            document.getElementById('availSofort').textContent = t.availSofort;
+            document.getElementById('availTwoWeeks').textContent = t.availTwoWeeks;
+            document.getElementById('availMonth').textContent = t.availMonth;
+            document.getElementById('availFlexible').textContent = t.availFlexible;
+            document.getElementById('langBasic').textContent = t.langBasic;
+            document.getElementById('langGood').textContent = t.langGood;
+            document.getElementById('langFluent').textContent = t.langFluent;
+            document.getElementById('submitBtn').textContent = t.submitBtn;
+            document.getElementById('privacyText').textContent = t.privacyText;
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                skill_level: document.getElementById('skill_level').value,
+                region: document.getElementById('region').value,
+                experience: document.getElementById('experience').value,
+                availability: document.getElementById('availability').value,
+                language: document.getElementById('language').value
+            };
+
+            try {
+                const response = await fetch('/api/candidates', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('successMessage').textContent = translations[currentLanguage].successMessage;
+                    document.getElementById('registrationForm').reset();
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error('Registration failed');
+                }
+            } catch (error) {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorMessage').textContent = translations[currentLanguage].errorMessage;
+            }
+        });
+
+        updateLanguage();
+    </script>
+</body>
+</html>
