@@ -4,7 +4,9 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import candidatesRouter from './api/candidates.js';
 import scrapeResultsRouter from './api/scrape-results.js';
+import outreachRouter from './api/outreach.js';
 import DailyScraperJob from './jobs/daily-scrape.js';
+import OutreachProcessor from './jobs/outreach-processor.js';
 
 dotenv.config();
 
@@ -24,6 +26,7 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api/candidates', candidatesRouter);
 app.use('/api/scrape-results', scrapeResultsRouter);
+app.use('/api/outreach', outreachRouter);
 
 // Serve static files (later for React frontend)
 app.use(express.static('public'));
@@ -45,10 +48,15 @@ const server = app.listen(PORT, () => {
   if (process.env.ANTHROPIC_API_KEY) {
     const scraperJob = new DailyScraperJob();
     scraperJob.schedule();
-    console.log('✓ Daily scraper job scheduled\n');
+    console.log('✓ Daily scraper job scheduled');
   } else {
-    console.log('⚠️  ANTHROPIC_API_KEY not set - scraper job disabled\n');
+    console.log('⚠️  ANTHROPIC_API_KEY not set - scraper job disabled');
   }
+
+  // Initialize outreach processor (runs hourly)
+  const outreachProcessor = new OutreachProcessor();
+  outreachProcessor.schedule();
+  console.log('✓ Outreach processor scheduled\n');
 });
 
 export default server;
